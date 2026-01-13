@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Room Archive</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Background -->
+    <div class="bg" aria-hidden="true"></div>
+
+    <!-- HOME -->
+    <main id="home" class="home">
+      <header class="topbar">
+        <a class="brand" href="#" id="brandHome">Room Archive</a>
+        <a class="about" href="#">About</a>
+      </header>
+
+      <section class="grid-wrap">
+        <div class="grid" id="grid"></div>
+      </section>
+    </main>
+
+    <!-- DETAIL OVERLAY (PAGE 4) -->
+    <section id="detail" class="detail" aria-hidden="true">
+      <header class="detail-topbar">
+        <a class="brand" href="#" id="brandDetail">Room Archive</a>
+        <button class="close" id="closeDetail" aria-label="Close">×</button>
+      </header>
+
+      <div class="detail-body">
+        <div class="detail-left">
+          <div class="detail-num" id="detailNum">01</div>
+
+          <div class="meta">
+            <div id="detailName">Name of object</div>
+            <div id="detailCategory">Category</div>
+            <div id="detailYear">Year of adoption: 2026</div>
+          </div>
+
+          <div class="desc" id="detailDesc">
+            Description: Lorem ipsum dolor sit amet, consectetur adipisicing
+            elit...
+          </div>
+        </div>
+
+        <div class="detail-right">
+          <div class="viewer" id="viewer">
+            <img id="viewerImg" alt="" />
+
+            <!-- Hover zones (arrows only appear when hovering these areas) -->
+            <div class="hover-zone left" id="hoverLeft" aria-hidden="true">
+              <button class="arrow" id="prevBtn" aria-label="Previous image">
+                ‹
+              </button>
+            </div>
+
+            <div class="hover-zone right" id="hoverRight" aria-hidden="true">
+              <button class="arrow" id="nextBtn" aria-label="Next image">
+                ›
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
