@@ -1,71 +1,1364 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Room Archive</title>
-    <link rel="stylesheet" href="./style.css" />
+    <meta charset="utf-8" />
+
+    <!-- <title>Room Archive</title> -->
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @font-face {
+        font-family: "Bobine";
+        src: url("fonts/WTBobineTRIAL-Regular.otf") format("opentype");
+        font-weight: 400; /* Regular */
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Bobine";
+        src: url("fonts/WTBobineTRIAL-Bold.otf") format("opentype");
+        font-weight: 700; /* Bold */
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Bobine";
+        src: url("fonts/WTBobineTRIAL-Titling.otf") format("opentype");
+        font-weight: 800; /* titling */
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Harber";
+        src: url("fonts/HARBER-trial-Regular.otf") format("opentype");
+        font-weight: 400; /* Regular */
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Harber";
+        src: url("fonts/HARBER-trial-Bold.otf") format("opentype");
+        font-weight: 700; /* Regular */
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "SerialBChaos";
+        src: url("fonts/SerialBChaosTRIAL-Disarray.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "SerialBChaos";
+        src: url("fonts/SerialBChaosTRIAL-Ripple.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "SerialB";
+        src: url("fonts/SerialBNeueTRIAL-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "SerialB";
+        src: url("fonts/SerialBNeueTRIAL-XS.ttf") format("truetype");
+        font-weight: 200;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "offBit";
+        src: url("fonts/OffBitTrial-DotBold.otf") format("opentype");
+        font-weight: 400; 
+        font-style: normal;
+      }
+
+      :root {
+        --color1: ;
+      }
+
+      body {
+        font-family: "Bobine", Arial, Helvetica, sans-serif;
+        cursor: url(""), auto;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      .grid img {
+        width: 100%;
+        height: 330px;
+        object-fit: contain;
+        height: auto;
+      }
+
+      .content-wrap {
+        width: min(80vw, 1100px);
+        margin: 40px auto;
+      }
+
+      .top-illustration {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+        margin-bottom: 33px;
+      }
+
+      .grid {
+        width: 100%;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 33px;
+        justify-items: center;
+      }
+
+      @media (max-width: 800px) {
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .background-img {
+        position: fixed;
+        background: "background-img";
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: -2;
+      }
+
+      .background-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* FIXED HEADER */
+      .home-title {
+        font-size: 20;
+        position: fixed;
+        left: 40px;
+        top: 50px;
+        transform: none;
+        text-align: left;
+        color: white;
+        z-index: 5;
+        width: auto;
+        font-weight: 700;
+      }
+
+      .about {
+        font-size: 20;
+        color: white;
+        position: fixed;
+        right: 40px;
+        top: 50px;
+        z-index: 5;
+        pointer-events: auto;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .ui {
+        position: relative;
+        padding-top: 120px;
+        padding-bottom: 80px;
+      }
+
+      .card {
+        position: relative;
+        width: 330px;
+        height: 330px;
+        height: auto;
+        width: auto;
+        display: block;
+        text-decoration: none;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .image-display {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+      }
+
+      .image-display img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 2px dashed white;
+        opacity: 0;
+        transition: opacity 0.1s ease;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      .card:hover::after {
+        opacity: 1;
+      }
+
+      .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .num {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: rgba(255, 255, 255, 1);
+        color: rgba(0, 0, 0, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        z-index: 2;
+        font-family: "Bobine", sans-serif;
+        font-weight: 400;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      /* DETAIL OVERLAY */
+      .detail {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(25px);
+        display: none;
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      .detail.show {
+        display: flex;
+      }
+
+      .detail-inner {
+        display: grid;
+        grid-template-columns: 360px 720px;
+        column-gap: 40px;
+        height: 720px;
+      }
+
+      .text-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+      }
+
+      .text-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .bigNum {
+        font-size: 80px;
+        color: white;
+        font-weight: 700;
+      }
+
+      .close {
+        font-size: 60px;
+        color: rgba(255, 255, 255, 1);
+        background: none;
+        border: none;
+        cursor: pointer;
+        line-height: 1;
+        font-family: "Bobine";
+        font-weight: 700;
+
+        position: absolute;
+        top: 80px; 
+        right: 220px; 
+        z-index: 200;
+      }
+
+      .text-bottom {
+        text-align: left;
+        
+      }
+
+      .meta {
+        color: white;
+        line-height: 1.2;
+        margin-bottom: 22px;
+        font-family: "SerialBChaos";
+        font-weight: 400;
+        font-size: 22;
+      }
+
+      .desc {
+        color: white;
+        line-height: 1.4;
+        font-family: "Bobine";
+        font-weight: 400;
+        font-size: 18;
+      }
+
+      .viewer {
+        position: relative;
+        width: 720px;
+        height: 720px;
+        background: rgba(220, 220, 220, 0.88);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .viewer img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      /* Small image-flip arrows (your existing ones) */
+      .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        color: white;
+        font-size: 42px;
+        width: auto;
+        height: auto;
+        padding: 10px;
+        cursor: pointer;
+        user-select: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .arrow-left {
+        left: 10px;
+      }
+
+      .arrow-right {
+        right: 10px;
+      }
+
+      .viewer:hover .arrow {
+        opacity: 1;
+      }
+
+      /* =========================
+     GLOBAL ITEM NAV ARROWS 
+         ========================= */
+      .global-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        z-index: 150; /* above overlay content */
+      }
+
+      .global-prev {
+        left: 40px;
+      }
+
+      .global-next {
+        right: 40px;
+      }
+
+      /* big arrow size */
+      .global-nav img {
+        height: 180px;
+        width: auto;
+        display: block;
+      }
+
+      /* hover swap logic: show default, hide hover */
+      .global-nav .nav-hover {
+        display: none;
+      }
+
+      /* when hovering the button, swap */
+      .global-nav:hover .nav-default {
+        display: none;
+      }
+
+      .global-nav:hover .nav-hover {
+        display: block;
+      }
+
+      /* ABOUT overlay (kept your existing) */
+      .aboutoverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(25px);
+        display: none;
+        z-index: 100;
+        align-items: flex-start;
+        justify-content: center;
+        color: rgb(255, 255, 255);
+      }
+
+      .aboutoverlay.show2 {
+        display: flex;
+      }
+
+      .about-inner {
+        width: min(1100px, 80vw);
+        min-height: 720px;
+        margin-top: 120px;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        column-gap: 120px;
+      }
+
+      .zine{
+        margin-top: 60px;
+        height: 300px;
+        width: 600px;
+      }
+
+      .about-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .about-title {
+        font-size: 48px;
+        font-weight: 600;
+        line-height: 1.05;
+      }
+
+      .about-x {
+        margin-top: 18px;
+        font-size: 40px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        line-height: 1;
+        color: rgb(255, 255, 255);
+        text-align: left;
+        font-family: "Bobine";
+      }
+
+      .about-thumb {
+        width: 240px;
+        height: 240px;
+        background: #d9d9d9;
+      }
+
+      .about-right {
+        font-size: 18px;
+        line-height: 1.4;
+      }
+
+      .about-right .label {
+        font-weight: 600;
+      }
+
+      .about-contact {
+        margin-top: 40px;
+        font-weight: 600;
+      }
+    </style>
   </head>
+
   <body>
-    <!-- Background -->
-    <div class="bg" aria-hidden="true"></div>
+    <section class="background-img">
+      <img src="assets\Background1.jpg" alt="" />
+    </section>
 
-    <!-- HOME -->
-    <main id="home" class="home">
-      <header class="topbar">
-        <a class="brand" href="#" id="brandHome">Room Archive</a>
-        <a class="about" href="#">About</a>
-      </header>
+    <div id="home"></div>
 
-      <section class="grid-wrap">
-        <div class="grid" id="grid"></div>
-      </section>
-    </main>
+    <div class="ui">
+      <section class="home-title">AoMR</section>
+      <div class="about" id="aboutbtn">About</div>
 
-    <!-- DETAIL OVERLAY (PAGE 4) -->
-    <section id="detail" class="detail" aria-hidden="true">
-      <header class="detail-topbar">
-        <a class="brand" href="#" id="brandDetail">Room Archive</a>
-        <button class="close" id="closeDetail" aria-label="Close">×</button>
-      </header>
+      <div class="content-wrap">
+        <img
+          class="top-illustration"
+          src="assets\IllustrationVer2.png"
+          alt="Archive illustration"
+        />
 
-      <div class="detail-body">
-        <div class="detail-left">
-          <div class="detail-num" id="detailNum">01</div>
-
-          <div class="meta">
-            <div id="detailName">Name of object</div>
-            <div id="detailCategory">Category</div>
-            <div id="detailYear">Year of adoption: 2026</div>
+        <div class="grid">
+          <div class="card" id="item01">
+            <div class="num">01</div>
+            <img id="beforeHover01" src="assets\DDY_riso.png" alt="" />
           </div>
 
-          <div class="desc" id="detailDesc">
-            Description: Lorem ipsum dolor sit amet, consectetur adipisicing
-            elit...
+          <div class="card" id="item02">
+            <div class="num">02</div>
+            <img src="assets\miaomiao_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item03">
+            <div class="num">03</div>
+            <img src="assets\hyein_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item04">
+            <div class="num">04</div>
+            <img src="assets\hyb_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item05">
+            <div class="num">05</div>
+            <img src="assets\Sylveon_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item06">
+            <div class="num">06</div>
+            <img src="assets\lyb_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item07">
+            <div class="num">07</div>
+            <img src="assets\kuromi_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item08">
+            <div class="num">08</div>
+            <img src="assets\ADC_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item09">
+            <div class="num">09</div>
+            <img src="assets\YGG_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item10">
+            <div class="num">10</div>
+            <img src="assets\K_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item11">
+            <div class="num">11</div>
+            <img src="assets\liuwei_riso.png" alt="" />
+          </div>
+
+          <div class="card" id="item12">
+            <div class="num">12</div>
+            <img src="assets\HR_riso.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================
+         DETAIL OVERLAYS
+         ======================= -->
+
+    <!-- detail01 -->
+    <section id="detail01" class="detail">
+      <!-- ADDED: Global item navigation buttons -->
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <!-- REPLACE THESE with your real arrow drawings -->
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum01" class="bigNum">01</div>
+            <button id="closebtn01" class="close">×</button>
+          </div>
+
+          <div class="text-bottom">
+            <div id="detailMeta01" class="meta">
+              Toxel Comfy Friends Plush <br />Category: Plush <br />Year of
+              adoption: 2024
+            </div>
+
+            <div id="detailDesc01" class="desc">
+              Measures about 14 ½ inches tall and 16 ½ inches long. This plush
+              toy was bought at the Pokémon pop-up store at Xidan Joy City in
+              Beijing. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod
+            </div>
           </div>
         </div>
 
-        <div class="detail-right">
-          <div class="viewer" id="viewer">
-            <img id="viewerImg" alt="" />
-
-            <!-- Hover zones (arrows only appear when hovering these areas) -->
-            <div class="hover-zone left" id="hoverLeft" aria-hidden="true">
-              <button class="arrow" id="prevBtn" aria-label="Previous image">
-                ‹
-              </button>
-            </div>
-
-            <div class="hover-zone right" id="hoverRight" aria-hidden="true">
-              <button class="arrow" id="nextBtn" aria-label="Next image">
-                ›
-              </button>
-            </div>
-          </div>
+        <div class="viewer">
+          <img id="detailImg01" src="assets/DDY_tp.png" alt="Item 01" />
+          <div class="arrow arrow-left" id="prev01">&#10094;</div>
+          <div class="arrow arrow-right" id="next01">&#10095;</div>
         </div>
       </div>
     </section>
 
-    <script src="./script.js"></script>
+    <!-- detail02 -->
+    <section id="detail02" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum02" class="bigNum">02</div>
+            <button id="closebtn02" class="close">×</button>
+          </div>
+
+          <div class="text-bottom">
+            <div id="detailMeta02" class="meta">
+              Pokepeace Espurr<br />Category: plush <br />Year of adoption: 2025
+            </div>
+            <div id="detailDesc02" class="desc">Lorem ipsum.dehdhbwhd ddwujdw djwjduwjud djwujdw diwiskddkfo sjnxskd jsjisa  shuhw dsivnjf diwjdwd jkvvu dif di sdcjd ksoa sjivvhue sxhsc xjsixjs. jscjscsjc cjsjis cjcsi xfogsn ..</div>
+          </div>
+        </div>
+
+        <div class="viewer">
+          <img id="detailImg02" src="assets\miaomiao_riso.png" alt="Item 02" />
+          <div class="arrow arrow-left" id="prev02">&#10094;</div>
+          <div class="arrow arrow-right" id="next02">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- detail03 -->
+    <section id="detail03" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum03" class="bigNum">03</div>
+            <button id="closebtn03" class="close">×</button>
+          </div>
+
+          <div class="text-bottom">
+            <div id="detailMeta03" class="meta">
+              Powerpuff Girls X Newjeans Hyein<br />Category: plush<br />Year of
+              adoption: 2023
+            </div>
+            <div id="detailDesc03" class="desc">
+              "Description: Lorem ipsumdedde uedhdue dheuhd..."
+            </div>
+          </div>
+        </div>
+
+        <div class="viewer">
+          <img id="detailImg03" src="assets\hyein_tp.png" alt="Item 03" />
+          <div class="arrow arrow-left" id="prev03">&#10094;</div>
+          <div class="arrow arrow-right" id="next03">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- detail04 -->
+    <section id="detail04" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum04" class="bigNum">04</div>
+            <button id="closebtn04" class="close">×</button>
+          </div>
+
+          <div class="text-bottom">
+            <div id="detailMeta04" class="meta">
+              Eevee Collection: Flareon <br />Category: plush<br />Year of
+              adoption: 2025
+            </div>
+            <div id="detailDesc04" class="desc">
+              Description: Measures about 7 ¾ inches tall by 8 ¼ inches long.
+              sjws siwssak swoowk
+            </div>
+          </div>
+        </div>
+
+        <div class="viewer">
+          <img id="detailImg04" src="assets/hyb_tp.png" alt="Item 04" />
+          <div class="arrow arrow-left" id="prev04">&#10094;</div>
+          <div class="arrow arrow-right" id="next04">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- detail05 -->
+    <section id="detail05" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum05" class="bigNum">05</div>
+            <button id="closebtn05" class="close">×</button>
+          </div>
+
+          <div class="text-bottom">
+            <div id="detailMeta05" class="meta">
+              Sylveon <br />Category <br />Year of adoption: 2025
+            </div>
+            <div id="detailDesc05" class="desc">
+              "Description: Lorem ipsumdedde uedhdue dheuhd..."
+            </div>
+          </div>
+        </div>
+
+        <div class="viewer">
+          <img id="detailImg05" src="assets/Sylveon_tp.png" alt="Item 05" />
+          <div class="arrow arrow-left" id="prev05">&#10094;</div>
+          <div class="arrow arrow-right" id="next05">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- detail06 -->
+    <section id="detail06" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum06" class="bigNum">06</div>
+            <button id="closebtn06" class="close">×</button>
+          </div>
+          <div class="text-bottom">
+            <div id="detailMeta06" class="meta">
+              Item 06<br />Category:<br />Year:
+            </div>
+            <div id="detailDesc06" class="desc">Description: ...</div>
+          </div>
+        </div>
+        <div class="viewer">
+          <img id="detailImg06" src="assets/lyb_tp.png" alt="Item 06" />
+          <div class="arrow arrow-left" id="prev06">&#10094;</div>
+          <div class="arrow arrow-right" id="next06">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detail07" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum07" class="bigNum">07</div>
+            <button id="closebtn07" class="close">×</button>
+          </div>
+          <div class="text-bottom">
+            <div id="detailMeta07" class="meta">
+              Item 07<br />Category:<br />Year:
+            </div>
+            <div id="detailDesc07" class="desc">Description: ...</div>
+          </div>
+        </div>
+        <div class="viewer">
+          <img id="detailImg07" src="assets/kuromi_tp.png" alt="Item 07" />
+          <div class="arrow arrow-left" id="prev07">&#10094;</div>
+          <div class="arrow arrow-right" id="next07">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detail08" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum08" class="bigNum">08</div>
+            <button id="closebtn08" class="close">×</button>
+          </div>
+          <div class="text-bottom">
+            <div id="detailMeta08" class="meta">
+              Item 08<br />Category:<br />Year:
+            </div>
+            <div id="detailDesc08" class="desc">Description: ...</div>
+          </div>
+        </div>
+        <div class="viewer">
+          <img id="detailImg08" src="assets/item08_1.png" alt="Item 08" />
+          <div class="arrow arrow-left" id="prev08">&#10094;</div>
+          <div class="arrow arrow-right" id="next08">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detail09" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum09" class="bigNum">09</div>
+            <button id="closebtn09" class="close">×</button>
+          </div>
+          <div class="text-bottom">
+            <div id="detailMeta09" class="meta">
+              Item 09<br />Category:<br />Year:
+            </div>
+            <div id="detailDesc09" class="desc">Description: ...</div>
+          </div>
+        </div>
+        <div class="viewer">
+          <img id="detailImg09" src="assets/YGG_bjfront.png" alt="Item 09" />
+          <div class="arrow arrow-left" id="prev09">&#10094;</div>
+          <div class="arrow arrow-right" id="next09">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detail10" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum10" class="bigNum">10</div>
+            <button id="closebtn10" class="close">×</button>
+          </div>
+          <div class="text-bottom">
+            <div id="detailMeta10" class="meta">
+              Item 10<br />Category:<br />Year:
+            </div>
+            <div id="detailDesc10" class="desc">Description: ...</div>
+          </div>
+        </div>
+        <div class="viewer">
+          <img id="detailImg10" src="assets/item10_1.png" alt="Item 10" />
+          <div class="arrow arrow-left" id="prev10">&#10094;</div>
+          <div class="arrow arrow-right" id="next10">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detail11" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum11" class="bigNum">11</div>
+            <button id="closebtn11" class="close">×</button>
+          </div>
+          <div class="text-bottom">
+            <div id="detailMeta11" class="meta">
+              Item 11<br />Category:<br />Year:
+            </div>
+            <div id="detailDesc11" class="desc">Description: ...</div>
+          </div>
+        </div>
+        <div class="viewer">
+          <img id="detailImg11" src="assets/item11_1.png" alt="Item 11" />
+          <div class="arrow arrow-left" id="prev11">&#10094;</div>
+          <div class="arrow arrow-right" id="next11">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detail12" class="detail">
+      <button class="global-nav global-prev" onclick="goItem(-1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowPrev.png"
+          alt="Previous item"
+        />
+        <img class="nav-hover" src="assets\BigPrevtHover.png" alt="" />
+      </button>
+
+      <button class="global-nav global-next" onclick="goItem(1)">
+        <img
+          class="nav-default"
+          src="assets/BigArrowNext.png"
+          alt="Next item"
+        />
+        <img class="nav-hover" src="assets/BigNextHover.png" alt="" />
+      </button>
+
+      <div class="detail-inner">
+        <div class="text-column">
+          <div class="text-top">
+            <div id="detailNum12" class="bigNum">12</div>
+            <button id="closebtn12" class="close">×</button>
+          </div>
+          <div class="text-bottom">
+            <div id="detailMeta12" class="meta">
+              Item 12<br />Category:<br />Year:
+            </div>
+            <div id="detailDesc12" class="desc">Description: ...</div>
+          </div>
+        </div>
+        <div class="viewer">
+          <img id="detailImg12" src="assets/item12_1.png" alt="Item 12" />
+          <div class="arrow arrow-left" id="prev12">&#10094;</div>
+          <div class="arrow arrow-right" id="next12">&#10095;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT overlay -->
+    <section id="aboutOverlay" class="aboutoverlay">
+      <div class="about-inner">
+        <div class="about-left">
+          <div>
+            <div class="about-title">About<br />this<br />Archive</div>
+            <button id="aboutclose" class="about-x">×</button>
+          </div>
+          <div class="about-thumb"></div>
+        </div>
+
+        <div class="about-right">
+          <div>
+            <span class="label"></span>
+            This is a catalog website I created to archive objects I own, they are objects that have quietly stayed with me over time. <br>Each object carries a memory fragment: a moment, a feeling, a place, a person, or a version of me. Together, they form a personal map of my room.<br>Explore the website like you’re taking a room tour. <br>Thanks for visiting. 
+          </div>
+
+          <div class="about-contact">Contact: yli27@risd.edu</div>
+          <div class="about-contact"><a href="https://087342.cargo.site/">Portfolio Website</a></div>
+          <img class="zine" src="assets/roombook1.png" alt="">
+
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // ========= about page =========
+      const aboutbtn = document.getElementById("aboutbtn");
+      const aboutOverlay = document.getElementById("aboutOverlay");
+      const aboutclose = document.getElementById("aboutclose");
+
+      aboutbtn.addEventListener("click", function () {
+        aboutOverlay.classList.toggle("show2");
+      });
+
+      aboutclose.addEventListener("click", function () {
+        aboutOverlay.classList.remove("show2");
+      });
+
+      /* =========================================================
+         ADDED: GLOBAL DETAIL NAV + SHARED IMAGE FLIP SYSTEM
+         ========================================================= */
+
+      // ADDED: item order (this is what makes wrap-around easy)
+      const itemOrder = [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+      ];
+
+      //track which detail overlay is currently open, when opening item x, currentitem=x
+      let currentItem = null;
+
+      // ADDED: grab all detail sections (so we can close them)
+      const allDetails = document.querySelectorAll(".detail");
+
+      function closeAllDetails() {
+        for (let i = 0; i < allDetails.length; i++) {
+          allDetails[i].classList.remove("show");
+        }
+      }
+
+      // ADDED: image arrays for each item (KEEPING your idea: per-item image arrays)
+      const imagesByItem = {
+        "01": [
+          "assets/DDY_bjfront.png",
+          "assets/DDY_bj2.png",
+          "assets/DDY_bj3.png",
+          "assets/DDY_bj4.png",
+          "assets/DDY_sh.png",
+
+        ],
+        "02": [
+          "assets/miaomiao_bjfront.png",
+          "assets/miaomiao_bjright.png",
+          "assets/miaomiao_bj3.png",
+          "assets/miaomiao_bj4.png",
+          "assets/miaomiao_tag1.png",
+          "assets/miaomiao_tag2.png",
+        ],
+        "03": [
+          "assets/hyein_bj1.png",
+          "assets/hyein_bj2.png",
+          "assets/hyein_sh2.png",
+          "assets/hyein_sh.png",
+          "assets/hyein_tag.png",
+        ],
+        "04": [
+          "assets/hyb_bj1.png",
+          "assets/hyb_bj2.png",
+          "assets/hyb_bj3.png",
+          "assets/hyb_sh.png",
+          "assets/hyb_tag.png",
+        ],
+        "05": [
+          "assets/Sylveon_bj1.png",
+          "assets/Sylveon_bj2.png",
+          "assets/Sylveon_sh.png",
+          "assets/Sylveon_tag.png",
+        ],
+
+        "06": ["assets/lyb_bjfront.png", 
+        "assets/lyb_bj2.png",
+        "assets/lyb_bj3.png",
+        "assets/lyb_sh.png",
+        "assets/lyb_tag.png",
+
+        ],
+
+        "07": ["assets/kuromi_bj1.png", 
+        "assets/kuromi_bj2.png",
+        "assets/kuromi_bj3.png",
+        "assets/kuromi_sh.png",
+
+        ],
+        "08": ["assets/ADC_bj1.png", 
+        "assets/ADC_bj2.png",
+        "assets/ADC_sh.png",
+        
+      ],
+
+        "09": ["assets/YGG_bjfront.png", 
+        "assets/YGG_bj2.png", 
+        "assets/YGG_bj3.png", 
+        "assets/YGG_sh.png",
+        "assets/YGG_tag.png"
+      ],
+        10: ["assets/K_tp.png", "assets/item10_2.png"],
+        11: ["assets/liuwei_tp.png", "assets/item11_2.png"],
+        12: ["assets/HR_bj1.png", "assets/HR_bj2.png"],
+      };
+
+      // store each item’s current image index here
+      const indexByItem = {};
+
+      // store each detail image <img> element here
+      const imgElByItem = {};
+
+      // fill the two objects above
+      for (let i = 0; i < itemOrder.length; i++) {
+        //i=0, num=01
+        const num = itemOrder[i];
+
+        //set every item’s current image index to 0, first image
+        indexByItem[num] = 0;
+
+        // always define the img element instead of relying on ID
+        imgElByItem[num] = document.getElementById("detailImg" + num);
+      }
+
+      // show one detail overlay by number
+      function showDetail(num) {
+        closeAllDetails();
+
+        const detailEl = document.getElementById("detail" + num);
+        detailEl.classList.add("show");
+
+        currentItem = num; // remember which overlay is open
+
+        // reset image to first image every time you open a detail
+        indexByItem[num] = 0;
+        updateImage(num);
+      }
+
+      // close a detail by number
+      function closeDetail(num) {
+        const detailEl = document.getElementById("detail" + num);
+        detailEl.classList.remove("show");
+        currentItem = null;
+      }
+
+      //update the <img> src for a detail, based on its current index
+      function updateImage(num) {
+        //
+        imgElByItem[num].src = imagesByItem[num][indexByItem[num]];
+      }
+
+      // ADDED: step through images inside ONE item (your small arrows)
+      function stepImage(num, dir) {
+        indexByItem[num] = indexByItem[num] + dir;
+
+        if (indexByItem[num] < 0) {
+          indexByItem[num] = imagesByItem[num].length - 1;
+        }
+
+        if (indexByItem[num] >= imagesByItem[num].length) {
+          indexByItem[num] = 0;
+        }
+
+        updateImage(num);
+      }
+
+      // GLOBAL NAV — go to previous/next ITEM (your big arrows)
+      // dir = -1 (prev item) or 1 (next item)
+      function goItem(dir) {
+        if (currentItem === null) return; // if nothing open, do nothing
+
+        // find current item index in itemOrder
+        let currentIndex = 0;
+        for (let i = 0; i < itemOrder.length; i++) {
+          if (itemOrder[i] === currentItem) {
+            currentIndex = i;
+          }
+        }
+
+        let newIndex = currentIndex + dir;
+
+        if (newIndex < 0) {
+          newIndex = itemOrder.length - 1;
+        }
+
+        if (newIndex >= itemOrder.length) {
+          newIndex = 0;
+        }
+
+        showDetail(itemOrder[newIndex]);
+      }
+
+      /* =========================================================
+          wire clicks using the shared functions
+         ========================================================= */
+
+      // Cards open the correct detail
+      for (let i = 0; i < itemOrder.length; i++) {
+        const num = itemOrder[i];
+        const card = document.getElementById("item" + num);
+
+        card.addEventListener("click", function () {
+          showDetail(num);
+        });
+      }
+
+      // Close buttons close the correct detail
+      for (let i = 0; i < itemOrder.length; i++) {
+        const num = itemOrder[i];
+        const closeBtn = document.getElementById("closebtn" + num);
+
+        closeBtn.addEventListener("click", function () {
+          closeDetail(num);
+        });
+      }
+
+      // Small viewer arrows flip images inside each item
+
+      for (let i = 0; i < itemOrder.length; i++) {
+        const num = itemOrder[i];
+        const prevBtn = document.getElementById("prev" + num);
+        const nextBtn = document.getElementById("next" + num);
+
+        prevBtn.addEventListener("click", function () {
+          stepImage(num, -1);
+        });
+
+        nextBtn.addEventListener("click", function () {
+          stepImage(num, 1);
+        });
+      }
+    </script>
   </body>
 </html>
